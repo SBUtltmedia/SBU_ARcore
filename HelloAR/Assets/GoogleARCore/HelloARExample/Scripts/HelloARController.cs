@@ -24,13 +24,14 @@ namespace GoogleARCore.HelloAR
     using UnityEngine;
     using UnityEngine.Rendering;
     using GoogleARCore;
-
+	using UnityEngine.UI;
     /// <summary>
     /// Controlls the HelloAR example.
     /// </summary>
     public class HelloARController : MonoBehaviour
     {
-        /// <summary>
+		public Slider mainSlider;
+		/// <summary>
         /// The first-person camera being used to render the passthrough camera.
         /// </summary>
         public Camera m_firstPersonCamera;
@@ -44,12 +45,12 @@ namespace GoogleARCore.HelloAR
         /// A model to place when a raycast from a user touch hits a plane.
         /// </summary>
         public GameObject m_andyAndroidPrefab;
-
+		public float scaleFactor;
         /// <summary>
         /// A gameobject parenting UI for displaying the "searching for planes" snackbar.
         /// </summary>
         public GameObject m_searchingForPlaneUI;
-
+	
         private List<TrackedPlane> m_newPlanes = new List<TrackedPlane>();
 
         private List<TrackedPlane> m_allPlanes = new List<TrackedPlane>();
@@ -72,6 +73,11 @@ namespace GoogleARCore.HelloAR
             new Color(1.0f, 0.756f, 0.027f)
         };
 
+		public void changeScale()
+		{
+			//Debug.Log(mainSlider.value);
+			scaleFactor = mainSlider.value;
+		}
         /// <summary>
         /// The Unity Update() method.
         /// </summary>
@@ -139,6 +145,7 @@ namespace GoogleARCore.HelloAR
                 // from the anchor's tracking.
                 var andyObject = Instantiate(m_andyAndroidPrefab, hit.Point, Quaternion.identity,
                     anchor.transform);
+				andyObject.transform.localScale = new Vector3 (scaleFactor, scaleFactor, scaleFactor);
 
                 // Andy should look at the camera but still be flush with the plane.
                 andyObject.transform.LookAt(m_firstPersonCamera.transform);
